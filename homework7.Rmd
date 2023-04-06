@@ -1,0 +1,90 @@
+---
+title: "homework7"
+author: "Aditi Nachnani"
+date: "2023-03-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+install.packages("productplots")
+library(productplots)
+library(dplyr)
+data(happy, package="productplots")
+head(happy)
+HAPPY <- readRDS("data/HAPPY.rds")
+
+
+```
+
+
+```{r pressure, echo=FALSE}
+#1.
+
+HAPPY[HAPPY=='IAP'] <- NA
+HAPPY[HAPPY=='DK'] <- NA
+HAPPY[HAPPY=='NA'] <- NA
+HAPPY
+
+#2
+HAPPY$AGE[HAPPY$AGE=='89 OR OLDER'] <- '89'
+typeof(HAPPY$AGE)
+numAge <- as.numeric(HAPPY$AGE)
+typeof(numAge)
+
+#3 CHECK
+happy <- happy %>% mutate(
+    degree = factor(tolower(degree)),
+    degree = factor(degree, levels=c("graduate school",
+                                      "bachelor",
+                                      "junior college",
+                                      "lt high school",
+                                      "high school"))
+  )%>% select(-degree)
+
+
+happy = happy %>% mutate(
+  happiness = factor(tolower(happy))
+  
+  )%>% select(-happy)
+
+
+happy = happy %>% mutate(
+  
+  finrela= factor(tolower(finrela)),
+  finrela = factor(finrela, levels=c("far above average",
+                                      "above average",
+                                     "average",
+                                      "below average",
+                                     "far below average"))
+  ) %>% select(-finrela)
+
+
+happy = happy %>% mutate(
+  health = factor(tolower(health)),
+   health = factor(health, levels=c("excellent",
+                                   "good",
+                                   "fair",
+                                   "poor"))
+)  %>% select(-health)
+
+happy = happy %>% mutate(
+  marital = factor(tolower(marital)),
+  sex = factor(tolower(sex)),
+  year = year,
+  age = age,
+  wtssall = wtssall,
+) %>% select(-sex, -marital, -year, -age, -wtssall)
+saveRDS(happy,"happy.rds")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
